@@ -117,7 +117,7 @@
 
     </div>
 
-    <button class="btn-export" @click="html2word">导出</button>
+    <button class="btn-export" onclick="html2word()">导出</button>
 
   </div>
 
@@ -162,6 +162,7 @@
   });
 
   function html2word() {
+    console.log(111);
     let header = `<html xmlns:o='urn:schemas-microsoft-com:office:office'
         xmlns:w='urn:schemas-microsoft-com:office:word'
         xmlns='http://www.w3.org/TR/REC-html40'>
