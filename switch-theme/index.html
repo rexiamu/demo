@@ -49,8 +49,8 @@
     }
 
     img {
-      width: 500px;
-      margin: 50px auto;
+      height: calc(100vh - 200px);
+      margin: 50px auto 0;
       display: block;
     }
   </style>
@@ -63,7 +63,7 @@
       <div class="btn" @click="switchTheme('blue')">蓝色主题</div>
       <div class="btn" @click="switchTheme('green')">绿色主题</div>
     </div>
-    <img :src=`./images/${theme}/character.png` alt="">
+    <img :src=`./images/${theme}/character.png`>
   </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
