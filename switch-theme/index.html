@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>主题切换</title>
+  <style>
+    body[data-theme='blue'] {
+      --background-color: #336699;
+      --text-color: #009966;
+    }
+
+    body[data-theme='green'] {
+      --background-color: #009966;
+      --text-color: #336699;
+    }
+
+    body {
+      background-color: var(--background-color);
+      transition: background-color .3s;
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--text-color);
+      transition: color .3s;
+    }
+
+    .switch {
+      display: flex;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 0.5em 2em;
+      background-color: #fff;
+      box-shadow: 0 0 5px #666;
+      color: #000;
+      margin: 10px;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: color 0.3s;
+    }
+
+    .btn:hover {
+      color: var(--background-color);
+    }
+
+    img {
+      width: 500px;
+      margin: 50px auto;
+      display: block;
+    }
+  </style>
+</head>
+
+<body data-theme="blue">
+  <div id="app">
+    <h1>主题切换</h1>
+    <div class="switch">
+      <div class="btn" @click="switchTheme('blue')">蓝色主题</div>
+      <div class="btn" @click="switchTheme('green')">绿色主题</div>
+    </div>
+    <img :src=`./images/${theme}/character.png` alt="">
+  </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+<script>
+  new Vue({
+    el: '#app',
+    data: {
+      theme: 'blue'
+    },
+    methods: {
+      switchTheme(theme) {
+        document.body.setAttribute('data-theme', theme);
+        this.theme = theme;
+      }
+    }
+  })
+</script>
+
+</html>
