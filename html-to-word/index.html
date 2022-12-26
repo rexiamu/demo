@@ -122,53 +122,47 @@
   </div>
 
 </body>
-<script src="./js/echarts.min.js"></script>
-<script src="./js/vue.min.js"></script>
+<script src="../assets/js/echarts.min.js"></script>
 <script>
+  let chart = null;
 
   const timeConsumptionMap = {
     drink: '喝水',
     eat: '吃点心',
     sleep: '打盹儿',
     daze: '发呆'
-  };
+  }
 
-  const app = new Vue({
-    el: '#app',
-    data: {
-      chart: null,
-      timeConsumption: [
-        { value: 1, name: '喝水' },
-        { value: 1.5, name: '吃点心' },
-        { value: 2, name: '打盹儿' },
-        { value: 3.5, name: '发呆' }
-      ],
-      timeConsumptionForm: {
-        drink: 1,
-        eat: 1.5,
-        sleep: 2,
-        daze: 3.5
-      },
-      showEditPanel: false
-    },
-    mounted() {
-      // 初始化图
-      this.chart = echarts.init(document.getElementById('chart'));
+  const timeConsumption = [
+    { value: 1, name: '喝水' },
+    { value: 1.5, name: '吃点心' },
+    { value: 2, name: '打盹儿' },
+    { value: 3.5, name: '发呆' }
+  ]
 
-      // 渲染数据
-      this.updateChart();
+  const timeConsumptionForm = {
+    drink: 1,
+    eat: 1.5,
+    sleep: 2,
+    daze: 3.5
+  }
 
-      // 渲染完成，转为图片
-      this.chart.on('finished', () => {
-        let img = document.querySelector('.img');
-        img.src = this.chart.getConnectedDataURL({
-          pixelRatio: 2
-        });
-      });
-    },
-    methods: {
-      html2word() {
-        let header = `<html xmlns:o='urn:schemas-microsoft-com:office:office'
+  // 初始化图
+  chart = echarts.init(document.getElementById('chart'));
+
+  // 渲染数据
+  updateChart();
+
+  // 渲染完成，转为图片
+  chart.on('finished', () => {
+    let img = document.querySelector('.img');
+    img.src = chart.getConnectedDataURL({
+      pixelRatio: 2
+    });
+  });
+
+  function html2word() {
+    let header = `<html xmlns:o='urn:schemas-microsoft-com:office:office'
         xmlns:w='urn:schemas-microsoft-com:office:word'
         xmlns='http://www.w3.org/TR/REC-html40'>
         <head>
@@ -191,43 +185,42 @@
             }
           </style>
         </head><body>`;
-        let footer = "</body></html>";
-        let sourceHTML = header + document.getElementById("page").innerHTML + footer;
+    let footer = "</body></html>";
+    let sourceHTML = header + document.getElementById("page").innerHTML + footer;
 
-        let source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
-        let fileDownload = document.createElement("a");
-        document.body.appendChild(fileDownload);
-        fileDownload.href = source;
-        fileDownload.download = '摸鱼的日常.doc';
-        fileDownload.click();
-        document.body.removeChild(fileDownload);
+    let source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+    let fileDownload = document.createElement("a");
+    document.body.appendChild(fileDownload);
+    fileDownload.href = source;
+    fileDownload.download = '摸鱼的日常.doc';
+    fileDownload.click();
+    document.body.removeChild(fileDownload);
+  }
+
+  function updateChart() {
+    // 指定图表的配置项和数据
+    let option = {
+      label: {
+        formatter: '{b}: {c}'
       },
-      updateChart() {
-        // 指定图表的配置项和数据
-        let option = {
-          label: {
-            formatter: '{b}: {c}'
-          },
-          series: [
-            {
-              name: '统计',
-              type: 'pie',
-              radius: '50%',
-              data: Object.keys(this.timeConsumptionForm).map(key => {
-                return {
-                  value: this.timeConsumptionForm[key],
-                  name: timeConsumptionMap[key]
-                }
-              })
+      series: [
+        {
+          name: '统计',
+          type: 'pie',
+          radius: '50%',
+          data: Object.keys(timeConsumptionForm).map(key => {
+            return {
+              value: timeConsumptionForm[key],
+              name: timeConsumptionMap[key]
             }
-          ]
-        };
+          })
+        }
+      ]
+    };
 
-        // 渲染数据
-        this.chart.setOption(option);
-      }
-    }
-  })
+    // 渲染数据
+    chart.setOption(option);
+  }
 </script>
 
 </html>
