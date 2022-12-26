@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>前端 demo 集合</title>
+  <style>
+    html{
+      background-color: #eee;
+    }
+    h1{
+      text-align: center;
+      margin: 50px 0;
+      color:transparent;
+      font-size: 40px;
+      font-weight: bold;
+      background: linear-gradient(45deg, rgb(4, 0, 255) 0%, rgb(0, 255, 13)  100%);
+      -webkit-background-clip: text;
+    }
+    .list{
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .card{
+      width: 360px;
+      height: 220px;
+      border-radius: 5px;
+      overflow: hidden;
+      box-shadow: 0 0 10px #ddd;
+      cursor: pointer;
+      position: relative;
+      margin: 20px;
+    }
+    .card:hover .img{
+      transform: scale(1.2);
+      filter: grayscale(0);
+    }
+    .card:hover .title{
+      color: #000;
+    }
+    .card .img{
+      width: 100%;
+      height: 170px;
+      display: block;
+      filter: grayscale(0.5);
+      transition: all 0.5s;
+    }
+    .card .title{
+      width: 100%;
+      height: 50px;
+      line-height: 50px;
+      box-sizing: border-box;
+      background-color: #fff;
+      font-size: 16px;
+      color: #333;
+      padding: 0 1em;
+      color: #999;
+      position: absolute;
+      bottom: 0;
+      z-index: 1;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      transition: all 0.5s;
+    }
+  </style>
+</head>
+<body>
+  <h1>前端 demo 集合</h1>
+  <div class="list">
+    <!-- <div class="card">
+      <img class="img" src="./images/earth-china-map.png">
+      <div class="title">在地球上显示中国地图</div>
+    </div> -->
+  </div>
+</body>
+<script>
+  const demoList = [
+    {
+      title: '在地球上显示中国地图',
+      img: './images/earth-china-map.png',
+      link: './earth-china-map/index.html'
+    }
+  ]
+  
+  let htmlStr = '';
+  demoList.forEach(demo => {
+    htmlStr += `<a class="card" href="${demo.link}" target="blank">
+      <img class="img" src="${demo.img}">
+      <div class="title" title="${demo.title}">${demo.title}</div>
+    </a>`
+  })
+  document.querySelector('.list').innerHTML = htmlStr;
+</script>
+</html>

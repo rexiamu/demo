@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>在地球上显示中国地图</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    #chart {
+      width: 100%;
+      height: 100vh;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="chart"></div>
+</body>
+<script src="./js/echarts.min.js"></script>
+<script src="./js/echarts-gl.min.js"></script>
+<script src="./js/jquery.min.js"></script>
+<script>
+  var baseTexture = null;
+  var option = null;
+  var geoJson = null;
+
+  const myChart = echarts.init(document.querySelector('#chart'))
+
+  // 请求 china.json文件
+  function getGeoJsonData() {
+    $.getJSON('./json/china-geo.json', function (jsonObj) {
+      geoJson = jsonObj;
+      getBaseTexture();
+    });
+  }
+
+  // 生成球面纹理
+  function getBaseTexture() {
+    echarts.registerMap('china', geoJson);
+    let canvas = document.createElement('canvas');
+    baseTexture = echarts.init(canvas, null, {
+      width: 4096,
+      height: 2048,
+    });
+    baseTexture.setOption({
+      geo: {
+        type: 'map',
+        map: 'china',
+        left: 0,
+        top: 0,
+        right: 0,
+        bottom: 0,
+        boundingCoords: [
+          [-180, 90],
+          [180, -90],
+        ],
+        itemStyle: {
+          areaColor: 'rgba(255,0,0,0.1)',
+          borderColor: '#ff0000',
+          borderWidth: 2,
+          color: '#fff'
+        },
+        emphasis: {
+          label: {
+            fontSize: 14,
+            color: '#fff',
+            textBorderColor: '#000',
+            textBorderWidth: 3
+          },
+          itemStyle: {
+            areaColor: 'rgba(0,0,255,0.5)'
+          },
+        },
+      },
+    });
+    drawEarth();
+  }
+
+  // 绘制球体
+  function drawEarth() {
+    option = {
+      tooltip: {
+        trigger: 'item',
+      },
+      globe: {
+        layers: [
+          { texture: './images/base-texture.jpg' }, // 地表样式贴图
+          { texture: baseTexture }], // echarts 实例贴图
+        globeRadius: 150, // 球面半径
+        environment: './images/starry-sky.jpg', // 天空盒子
+        viewControl: {
+          alpha: 30,
+          beta: 160,
+          autoRotate: false, // 自动旋转
+          autoRotateAfterStill: 10,
+          distance: 250,
+          targetCoord: [108.50, 34.53], // 定位
+        },
+      }
+    };
+    myChart.setOption(option);
+  }
+
+  getGeoJsonData();
+</script>
+
+</html>
