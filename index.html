@@ -103,12 +103,22 @@
       title: 'html 导出为 word',
       img: './assets/images/html-to-word.png',
       link: './html-to-word/index.html'
+    },
+    {
+      title: '虚拟列表',
+      img: './assets/images/virtual-list.png',
+      link: './virtual-list/index.html'
+    },
+    {
+      title: 'css 立方体',
+      img: './assets/images/css-cube.png',
+      link: './css-cube/index.html'
     }
   ]
 
   let htmlStr = '';
   demoList.forEach(demo => {
-    htmlStr += `<a class="card" href="${demo.link}" target="blank">
+    htmlStr += `<a class="card" href="${demo.link}" target="_blank">
       <img class="img" src="${demo.img || './images/default.jpg'}">
       <div class="title" title="${demo.title}">${demo.title}</div>
     </a>`
