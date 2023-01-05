@@ -91,41 +91,35 @@
   const demoList = [
     {
       title: '在地球上显示中国地图',
-      img: './assets/images/earth-china-map.png',
-      link: './earth-china-map/index.html'
+      name: 'earth-china-map'
     },
     {
       title: '主题切换',
-      img: './assets/images/switch-theme.png',
-      link: './switch-theme/index.html'
+      name: 'switch-theme'
     },
     {
       title: 'html 导出为 word',
-      img: './assets/images/html-to-word.png',
-      link: './html-to-word/index.html'
+      name: 'html-to-word'
     },
     {
       title: '虚拟列表',
-      img: './assets/images/virtual-list.png',
-      link: './virtual-list/index.html'
+      name: 'virtual-list'
     },
     {
       title: 'css 立方体',
-      img: './assets/images/css-cube.png',
-      link: './css-cube/index.html'
+      name: 'css-cube'
     },
     {
       title: '数据大屏',
-      img: './assets/images/data-large-screen.png',
-      link: './data-large-screen/index.html'
+      name: 'data-large-screen'
     }
   ]
 
   let htmlStr = '';
   demoList.forEach(demo => {
-    htmlStr += `<a class="card" href="${demo.link}" target="_blank">
-      <img class="img" src="${demo.img || './images/default.jpg'}">
-      <div class="title" title="${demo.title}">${demo.title}</div>
+    htmlStr += `<a class="card" href="./${ demo.name }/index.html" target="_blank">
+      <img class="img" src="./assets/images/${ demo.name }.png">
+      <div class="title" title="${ demo.title }">${ demo.title }</div>
     </a>`
   })
   document.querySelector('.list').innerHTML = htmlStr;
