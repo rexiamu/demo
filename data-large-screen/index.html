@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>数据大屏</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    #app {
+      width: 100%;
+      height: 100vh;
+      background-color: rgb(38, 50, 122);
+      color: #fff;
+    }
+
+    .wrap {
+      height: 100%;
+      box-sizing: border-box;
+      padding: 60px 30px 30px;
+      display: grid;
+      grid-template-rows: repeat(2, 1fr);
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-flow: column;
+      grid-gap: 10px;
+    }
+
+    .map {
+      grid-column-start: 2;
+      grid-column-end: 4;
+      grid-row-start: span 2;
+      display: flex;
+      justify-content: center;
+    }
+
+    #dv-full-screen-container {
+      transition: all .3s;
+    }
+
+    .dv-border-box-11-title {
+      font-weight: bold;
+      letter-spacing: 5px;
+      letter-spacing: 10px;
+      animation: breath infinite 5s;
+    }
+
+    @keyframes breath {
+
+      0%,
+      100% {
+        text-shadow: none;
+      }
+
+      50% {
+        text-shadow: 0 0 10px #fff;
+      }
+    }
+
+    .chart {
+      width: 100%;
+      height: 100%;
+    }
+
+    .section {
+      position: relative;
+    }
+
+    .section .title {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      box-sizing: border-box;
+    }
+
+    .section .title .name {
+      font-size: 20px;
+      font-weight: bold;
+      letter-spacing: 0.2em;
+      transform: skew(-10deg);
+      position: relative;
+    }
+
+    .section .title .name::after {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      bottom: -0.2em;
+      left: 0;
+      width: 100%;
+      height: 1em;
+      background-image: linear-gradient(to top, #6666ff, #6666ff00);
+    }
+
+    #earth {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <dv-full-screen-container>
+      <dv-border-box-11 title="数据大屏">
+        <div class="wrap">
+          <div class="section">
+            <dv-border-box-8>
+              <div class="title">
+                <div class="name">周销售量</div>
+                <dv-decoration-1 style="width:200px;height:50px;" />
+              </div>
+              <div class="chart" ref="chart1"></div>
+            </dv-border-box-8>
+          </div>
+          <div class="section">
+            <dv-border-box-8>
+              <div class="title">
+                <div class="name">周销售量</div>
+                <dv-decoration-3 style="width:200px;height:50px;" />
+              </div>
+              <div class="chart" ref="chart2"></div>
+            </dv-border-box-8>
+          </div>
+          <div class="section map">
+            <dv-border-box-3>
+              <div id="earth"></div>
+            </dv-border-box-3>
+          </div>
+          <div class="section">
+            <dv-border-box-8>
+              <div class="title">
+                <div class="name">预算&开销</div>
+                <dv-decoration-1 style="width:200px;height:50px;" />
+              </div>
+              <div class="chart" ref="chart3"></div>
+            </dv-border-box-8>
+          </div>
+          <div class="section">
+            <dv-border-box-8>
+              <div class="title">
+                <div class="name">工作完成度</div>
+                <dv-decoration-3 style="width:200px;height:50px;" />
+              </div>
+              <div class="chart" ref="chart4"></div>
+            </dv-border-box-8>
+          </div>
+        </div>
+      </dv-border-box-11>
+    </dv-full-screen-container>
+  </div>
+</body>
+<script src="../assets/js/vue.min.js"></script>
+<script src="../assets/js/datav.min.vue.js"></script>
+<script src="../assets/js/echarts.min.js"></script>
+<script src="../assets/js/echarts-gl.min.js"></script>
+<script src="../assets/js/jquery.min.js"></script>
+<script>
+  function randomNum(minNum, maxNum) { switch (arguments.length) { case 1: return parseInt(Math.random() * minNum + 1); break; case 2: return parseInt(Math.random() * (maxNum - minNum + 1) + minNum); break; default: return 0; break; } }
+  const app = new Vue({
+    el: '#app',
+    data() {
+      return {
+
+      }
+    },
+    mounted() {
+      setTimeout(() => {
+        this.initChart1()
+        this.initChart2()
+        this.initChart3()
+        this.initChart4()
+        this.initEarth()
+      }, 0)
+    },
+    methods: {
+      initChart1() {
+        const myChart = echarts.init(this.$refs.chart1);
+        let option;
+
+        option = {
+          grid: {
+            top: 80,
+            left: 50,
+            bottom: 40
+          },
+          xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+            axisLine: {
+              lineStyle: {
+                color: "#fff"
+              }
+            }
+          },
+          yAxis: {
+            type: 'value',
+            axisLine: {
+              lineStyle: {
+                color: "#fff"
+              }
+            }
+          },
+          series: [
+            {
+              data: [820, 932, 901, 934, 1290, 1330, 1320],
+              type: 'line',
+              areaStyle: {
+                color: {
+                  type: 'linear',
+                  x: 0,
+                  y: 0,
+                  x2: 0,
+                  y2: 1,
+                  colorStops: [{
+                    offset: 0, color: '#6666FF' // 0% 处的颜色
+                  }, {
+                    offset: 1, color: '#6666FF00' // 100% 处的颜色
+                  }],
+                }
+              },
+            }
+          ]
+        };
+
+        option && myChart.setOption(option);
+
+        setInterval(() => {
+          option.series[0].data = [randomNum(800, 1500), randomNum(800, 1500), randomNum(800, 1500), randomNum(800, 1500), randomNum(800, 1500), randomNum(800, 1500), randomNum(800, 1500)]
+          myChart.setOption(option);
+        }, 3000);
+      },
+      initChart2() {
+        const myChart = echarts.init(this.$refs.chart2);
+        let option;
+
+        option = {
+          grid: {
+            top: 80,
+            left: 50,
+            bottom: 40
+          },
+          xAxis: {
+            type: 'category',
+            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+            axisLine: {
+              lineStyle: {
+                color: "#fff"
+              }
+            }
+          },
+          yAxis: {
+            type: 'value',
+            axisLine: {
+              lineStyle: {
+                color: "#fff"
+              }
+            }
+          },
+          series: [
+            {
+              data: [820, 932, 901, 934, 1290, 1330, 1320],
+              type: 'bar',
+              itemStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  { offset: 0, color: '#6666FF' },
+                  { offset: 1, color: '#6666FF00' }
+                ])
+              },
+            }
+          ]
+        };
+
+        option && myChart.setOption(option);
+        setInterval(() => {
+          option.series[0].data = [randomNum(800, 1500), randomNum(800, 1500), randomNum(800, 1500), randomNum(800, 1500), randomNum(800, 1500), randomNum(800, 1500), randomNum(800, 1500)]
+          myChart.setOption(option);
+        }, 3000);
+      },
+      initChart3() {
+        const myChart = echarts.init(this.$refs.chart3);
+        let option;
+
+        option = {
+          radar: {
+            center: ['50%', '55%'],
+            radius: 110,
+            indicator: [{
+              name: "销售",
+              max: 1500
+            }, {
+              name: "管理",
+              max: 1500
+            }, {
+              name: "技术",
+              max: 1500
+            }, {
+              name: "客服",
+              max: 1500
+            }, {
+              name: "研发",
+              max: 1500
+            }, {
+              name: "市场",
+              max: 1500
+            }]
+          },
+          series: [{
+            name: "预算 vs 开销",
+            type: "radar",
+            areaStyle: {},
+            data: [{
+              value: [800, 845, 956, 1256, 953, 1432],
+              name: "预算"
+            },{
+              value: [786, 882, 950, 1365, 865, 1356],
+              name: "开销"
+            }]
+          }]
+        };
+
+        option && myChart.setOption(option);
+        setInterval(() => {
+          option.series[0].data[0].value = [randomNum(800, 1500), randomNum(800, 1500), randomNum(800, 1500), randomNum(800, 1500), randomNum(800, 1500), randomNum(800, 1500), randomNum(800, 1500)]
+          option.series[0].data[1].value = [randomNum(800, 1500), randomNum(800, 1500), randomNum(800, 1500), randomNum(800, 1500), randomNum(800, 1500), randomNum(800, 1500), randomNum(800, 1500)]
+          myChart.setOption(option);
+        }, 3000);
+      },
+      initChart4() {
+        const myChart = echarts.init(this.$refs.chart4);
+        let option;
+
+        option = {
+          series: [
+            {
+              name: 'Pressure',
+              type: 'gauge',
+              center: ['50%', '60%'],
+              splitLine: {
+                lineStyle: {
+                  color: '#fff'
+                }
+              },
+              axisTick: {
+                lineStyle: {
+                  color: '#fff'
+                }
+              },
+              axisLabel: {
+                color: '#fff'
+              },
+              title: {
+                color: '#fff'
+              },
+              progress: {
+                show: true
+              },
+              detail: {
+                valueAnimation: true,
+                formatter: '{value}',
+                color: '#fff'
+              },
+              data: [
+                {
+                  value: 85,
+                  name: 'SCORE'
+                }
+              ]
+            }
+          ]
+        };
+
+        option && myChart.setOption(option);
+        setInterval(() => {
+          option.series[0].data[0].value = randomNum(80, 100)
+          myChart.setOption(option);
+        }, 3000);
+      },
+      initEarth() {
+        var baseTexture = null;
+        var option = null;
+        var geoJson = null;
+
+        const myChart = echarts.init(document.querySelector('#earth'))
+
+        // 请求 china.json文件
+        function getGeoJsonData() {
+          $.getJSON('./json/china-geo.json', function (jsonObj) {
+            geoJson = jsonObj;
+            getBaseTexture();
+          });
+        }
+
+        // 生成球面纹理
+        function getBaseTexture() {
+          echarts.registerMap('china', geoJson);
+          let canvas = document.createElement('canvas');
+          baseTexture = echarts.init(canvas, null, {
+            width: 4096,
+            height: 2048,
+          });
+          baseTexture.setOption({
+            geo: {
+              type: 'map',
+              map: 'china',
+              left: 0,
+              top: 0,
+              right: 0,
+              bottom: 0,
+              boundingCoords: [
+                [-180, 90],
+                [180, -90],
+              ],
+              itemStyle: {
+                areaColor: 'rgba(255,0,0,0.1)',
+                borderColor: '#ff0000',
+                borderWidth: 2,
+                color: '#fff'
+              },
+              emphasis: {
+                label: {
+                  fontSize: 14,
+                  color: '#fff',
+                  textBorderColor: '#000',
+                  textBorderWidth: 3
+                },
+                itemStyle: {
+                  areaColor: 'rgba(0,0,255,0.5)'
+                },
+              },
+            },
+          });
+          drawEarth();
+        }
+
+        // 绘制球体
+        function drawEarth() {
+          option = {
+            tooltip: {
+              trigger: 'item',
+            },
+            globe: {
+              layers: [
+                { texture: './images/base-texture.jpg' }, // 地表样式贴图
+                { texture: baseTexture }], // echarts 实例贴图
+              globeRadius: 100, // 球面半径
+              // environment: './images/starry-sky.jpg', // 天空盒子
+              viewControl: {
+                alpha: 30,
+                beta: 160,
+                autoRotate: false, // 自动旋转
+                autoRotateAfterStill: 10,
+                distance: 250,
+                targetCoord: [108.50, 34.53], // 定位
+              },
+            },
+            series: [
+              {
+                name: '世界贸易情况',
+                type: 'lines3D',
+                coordinateSystem: 'globe',
+                effect: {
+                    show: true,
+                },
+                blendMode: 'lighter',
+                lineStyle: {
+                    width: 2,
+                },
+                data: [],
+                silent: false,
+              },
+            ],
+          };
+          // 随机数据 i控制线数量
+          for (let i = 0; i < 100; i++) {
+              option.series[0].data = option.series[0].data.concat(rodamData());
+          }
+          myChart.clear();
+          myChart.setOption(option);
+        }
+
+        function rodamData() {
+            let name = '随机数据' + Math.random().toFixed(5) * 100000;
+            // 模拟数据，构造飞线的起始经纬度
+            let longitude = 116.2;
+            let latitude = 39.56;
+            let longitude2 = Math.random() * 360 - 180;
+            let latitude2 = Math.random() * 180 - 90;
+            return {
+                coords: [
+                    [longitude, latitude],
+                    [longitude2, latitude2],
+                ],
+                value: (Math.random() * 3000).toFixed(2),
+            };
+        }
+
+        getGeoJsonData();
+      }
+    }
+  })
+</script>
+
+</html>
