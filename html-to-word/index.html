@@ -54,11 +54,11 @@
   <div id="app">
     <div id="page">
       <h1 style="font-size: 20pt;margin-bottom: 20px;">
-        <center><b>摸鱼的日常</b></center>
+        <center><b>文档标题</b></center>
       </h1>
 
       <p>
-        <center>2022年9月20日</center>
+        <center>2022年2月22日</center>
       </p>
 
       <h2>一、标题</h2>
@@ -66,38 +66,78 @@
       <h3>（一）段落加表格</h3>
 
       <p>
-        南门外那些水坑，哪个坑里有嘛鱼，哪个坑里的鱼大小，哪个坑的鱼有多少条，他心里全一清二楚。
-        他能把坑里的鱼全钓绝了，但他也决不把任何一个坑里的鱼钓绝了。钓绝了，他玩嘛？
+        我们换着玩那破镜子，边吃桑葚干，边用它们扔对方，忽而吃吃逗乐，忽而开怀大笑。我依然能记得哈桑坐在树上的样子，阳光穿过叶子，照着他那浑圆的脸庞。
       </p>
 
       <table border="1" align="center">
         <thead>
           <tr>
             <th>序号</th>
-            <th>喝水</th>
-            <th>吃点心</th>
-            <th>打盹儿</th>
-            <th>发呆</th>
+            <th>时间</th>
+            <th>抖音</th>
+            <th>快手</th>
+            <th>小红书</th>
           </tr>
         </thead>
 
         <tbody>
           <tr>
             <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
+            <td>周一</td>
+            <td>300</td>
+            <td>200</td>
+            <td>100</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>周二</td>
+            <td>300</td>
+            <td>200</td>
+            <td>100</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>周三</td>
+            <td>300</td>
+            <td>200</td>
+            <td>100</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>周四</td>
+            <td>300</td>
+            <td>200</td>
+            <td>100</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>周五</td>
+            <td>300</td>
+            <td>200</td>
+            <td>100</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>周六</td>
+            <td>300</td>
+            <td>200</td>
+            <td>100</td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>周日</td>
+            <td>300</td>
+            <td>200</td>
+            <td>100</td>
           </tr>
         </tbody>
 
         <tfoot>
           <tr>
-            <td>合计</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
+            <td colspan="2">合计</td>
+            <td>2100</td>
+            <td>1400</td>
+            <td>700</td>
           </tr>
         </tfoot>
       </table>
@@ -105,8 +145,7 @@
       <h3>（二）段落加图</h3>
 
       <p>
-        像是掌心里的一条鱼。攥紧时它会拼命挣扎，把它放回河流中，它又不知游去了什么方向。
-        这样拼命克制。又无法不放任它随它而去。
+        我们换着玩那破镜子，边吃桑葚干，边用它们扔对方，忽而吃吃逗乐，忽而开怀大笑。我依然能记得哈桑坐在树上的样子，阳光穿过叶子，照着他那浑圆的脸庞。
       </p>
 
       <center>
@@ -124,45 +163,9 @@
 </body>
 <script src="../assets/js/echarts.min.js"></script>
 <script>
-  let chart = null;
-
-  const timeConsumptionMap = {
-    drink: '喝水',
-    eat: '吃点心',
-    sleep: '打盹儿',
-    daze: '发呆'
-  }
-
-  const timeConsumption = [
-    { value: 1, name: '喝水' },
-    { value: 1.5, name: '吃点心' },
-    { value: 2, name: '打盹儿' },
-    { value: 3.5, name: '发呆' }
-  ]
-
-  const timeConsumptionForm = {
-    drink: 1,
-    eat: 1.5,
-    sleep: 2,
-    daze: 3.5
-  }
-
-  // 初始化图
-  chart = echarts.init(document.getElementById('chart'));
-
-  // 渲染数据
-  updateChart();
-
-  // 渲染完成，转为图片
-  chart.on('finished', () => {
-    let img = document.querySelector('.img');
-    img.src = chart.getConnectedDataURL({
-      pixelRatio: 2
-    });
-  });
+  initChart();
 
   function html2word() {
-    console.log(111);
     let header = `<html xmlns:o='urn:schemas-microsoft-com:office:office'
         xmlns:w='urn:schemas-microsoft-com:office:word'
         xmlns='http://www.w3.org/TR/REC-html40'>
@@ -193,14 +196,17 @@
     let fileDownload = document.createElement("a");
     document.body.appendChild(fileDownload);
     fileDownload.href = source;
-    fileDownload.download = '摸鱼的日常.doc';
+    fileDownload.download = '文档标题.doc';
     fileDownload.click();
     document.body.removeChild(fileDownload);
   }
 
-  function updateChart() {
-    // 指定图表的配置项和数据
-    let option = {
+  function initChart() {
+    let chart, option;
+
+    chart = echarts.init(document.getElementById('chart'));
+
+    option = {
       label: {
         formatter: '{b}: {c}'
       },
@@ -209,18 +215,23 @@
           name: '统计',
           type: 'pie',
           radius: '50%',
-          data: Object.keys(timeConsumptionForm).map(key => {
-            return {
-              value: timeConsumptionForm[key],
-              name: timeConsumptionMap[key]
-            }
-          })
+          data: [
+          { value: 2100, name: '抖音' },
+          { value: 1400, name: '快手' },
+          { value: 700, name: '小红书' }
+          ]
         }
       ]
     };
 
-    // 渲染数据
-    chart.setOption(option);
+    chart && chart.setOption(option);
+
+    chart.on('finished', () => {
+      let img = document.querySelector('.img');
+      img.src = chart.getConnectedDataURL({
+        pixelRatio: 2
+      });
+    });
   }
 </script>
 
