@@ -115,14 +115,20 @@
     }
   ]
 
-  let htmlStr = '';
-  demoList.forEach(demo => {
-    htmlStr += `<a class="card" href="./${ demo.name }/index.html" target="_blank">
-      <img class="img" src="./assets/images/${ demo.name }.png">
-      <div class="title" title="${ demo.title }">${ demo.title }</div>
-    </a>`
-  })
-  document.querySelector('.list').innerHTML = htmlStr;
+  initList();
+
+  function initList(){
+    let htmlStr = '';
+
+    demoList.forEach(demo => {
+      htmlStr += `<a class="card" href="./${ demo.name }/index.html" target="_blank">
+        <img class="img" src="./assets/images/${ demo.name }.png" onerror="javascript:this.src='./assets/images/default.png'">
+        <div class="title" title="${ demo.title }">${ demo.title }</div>
+      </a>`
+    })
+
+    document.querySelector('.list').innerHTML = htmlStr;
+  }
 </script>
 
 </html>
